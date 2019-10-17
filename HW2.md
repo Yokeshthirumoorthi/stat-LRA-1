@@ -245,9 +245,17 @@ But on the other hand we have R-squared = 42.4%. This shows that there is a lot 
      Max.   : 32.288   Max.   :147.07  
     ```
 
+
+
 **d.** Give the 95% confidence and prediction intervals for the number of retained impressions for MCI. 
 
     For MCI:
 
     * 95% Confidence Interval - (20.18314, 43.68102)
     * 95% Prediction Interval - (-18.64084, 82.50499)
+
+2.25 Consider the simple linear regression model y = β0 + β1x + ε, with E(ε) = 0 Var(ε) = σ2, and ε uncorrelated.
+$$
+a. \text{Show that } Cov(\hat \beta_{0},\hat \beta_1 ) = −\overline{x}σ^2/S_{xx}. \newline
+b. Show that Cov(\overline{y},β_1) = 0.
+$$
