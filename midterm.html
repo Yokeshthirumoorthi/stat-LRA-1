@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Read data from csv</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body class="vscode-light">
+        <pre><code class="language-R"><div><span class="hljs-comment"># Read data from csv</span>
+data &lt;- read_csv(<span class="hljs-string">"MidReg.csv"</span>)
+
+<span class="hljs-comment"># Fit data to linear model</span>
+model1 &lt;- lm(Y ~ X1 + X2 + X1sq + X2sq + X1X2, data = data)
+
+<span class="hljs-comment"># Print the model summary</span>
+summary(model1)
+
+<span class="hljs-comment">## Output</span>
+
+<span class="hljs-comment"># Residuals:</span>
+<span class="hljs-comment">#     Min      1Q  Median      3Q     Max </span>
+<span class="hljs-comment"># -9155.4 -2811.0  -246.6  2111.6 18567.8 </span>
+
+<span class="hljs-comment"># Coefficients:</span>
+<span class="hljs-comment">#               Estimate Std. Error t value Pr(&gt;|t|)</span>
+<span class="hljs-comment"># (Intercept) 13586.4511 22793.3837   0.596    0.561</span>
+<span class="hljs-comment"># X1          -3434.5077  4282.7845  -0.802    0.436</span>
+<span class="hljs-comment"># X2            128.6019   306.3080   0.420    0.681</span>
+<span class="hljs-comment"># X1sq          153.7078   172.0089   0.894    0.387</span>
+<span class="hljs-comment"># X2sq           -0.8221     1.1751  -0.700    0.496</span>
+<span class="hljs-comment"># X1X2           -2.9469    28.2256  -0.104    0.918</span>
+
+<span class="hljs-comment"># Residual standard error: 6317 on 14 degrees of freedom</span>
+<span class="hljs-comment"># Multiple R-squared:  0.4243,    Adjusted R-squared:  0.2187 </span>
+<span class="hljs-comment"># F-statistic: 2.064 on 5 and 14 DF,  p-value: 0.1312</span>
+
+<span class="hljs-comment"># a scatterplot matrix which include all the variables in the data set.</span>
+pairs(data)
+
+<span class="hljs-comment"># matrix of correlations between the variables</span>
+cor(data)
+
+<span class="hljs-comment"># diagnostic plots of the linear regression fit</span>
+plot(hist(resid(model1)))
+plot(density(resid(model1)))
+
+par(mfrow = c(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>))
+plot(model1)
+
+durbinWatsonTest(model1)
+
+<span class="hljs-comment"># Add new data to data frame</span>
+newdat &lt;- data.frame(
+            X1 = c(<span class="hljs-number">10</span>),
+            X2 = c(<span class="hljs-number">50</span>), 
+            X1sq = c(<span class="hljs-number">100</span>),
+            X2sq = c(<span class="hljs-number">2500</span>),
+            X1X2 = c(<span class="hljs-number">500</span>))
+
+<span class="hljs-comment"># Find confidence interval for new data</span>
+predict(model1, newdat, se.fit = <span class="hljs-literal">TRUE</span>, interval = <span class="hljs-string">"prediction"</span>, level = <span class="hljs-number">0.95</span>)
+
+<span class="hljs-comment">## Output</span>
+<span class="hljs-comment">#         fit       lwr      upr</span>
+<span class="hljs-comment"># 1 -2486.352 -17426.63 12453.93</span>
+
+</div></code></pre>
+<hr>
+<h3 id="building-a-regression-model">Building a regression model</h3>
+<p>The regreesion equation is</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo>=</mo><mn>13586.45</mn><mo>−</mo><mn>3434.50</mn><mi>X</mi><mn>1</mn><mo>+</mo><mn>128.60</mn><mi>X</mi><mn>2</mn><mo>+</mo><mn>153.70</mn><mi>X</mi><msup><mn>1</mn><mn>2</mn></msup><mo>−</mo><mn>0.82</mn><mi>X</mi><msup><mn>2</mn><mn>2</mn></msup><mo>−</mo><mn>2.94</mn><mi>X</mi><mn>1</mn><mi>X</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\hat y = 13586.45 - 3434.50X1 + 128.60 X2 + 153.70X1^2  - 0.82X2^2-2.94X1X2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">3</span><span class="mord">5</span><span class="mord">8</span><span class="mord">6</span><span class="mord">.</span><span class="mord">4</span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mord">4</span><span class="mord">3</span><span class="mord">4</span><span class="mord">.</span><span class="mord">5</span><span class="mord">0</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span><span class="mord">.</span><span class="mord">6</span><span class="mord">0</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.9474379999999999em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">5</span><span class="mord">3</span><span class="mord">.</span><span class="mord">7</span><span class="mord">0</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.9474379999999999em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">8</span><span class="mord">2</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">.</span><span class="mord">9</span><span class="mord">4</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">1</span><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="mord">2</span></span></span></span></span></p>
+<hr>
+<h3 id="a-scatterplot-matrix-which-include-all-the-variables-in-the-data-set">A scatterplot matrix which include all the variables in the data set.</h3>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/scatterplot_matrix.png" width="450" title="hover text">
+</p>
+    </body>
+    </html>
