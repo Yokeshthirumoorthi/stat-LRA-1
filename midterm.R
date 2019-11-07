@@ -1,14 +1,26 @@
 library(readr) 
+library(car)
 
 # Read data from csv
 data <- read_csv("MidReg.csv")
 
 # Fit data to linear model
-model1 <- lm(Y ~ X1 + X2 + X1sq + X2sq + X1X2, data = data)
+model1 <- lm(Y ~ X1 + X2 + X1sq + X2sq + X1X2, data = data, na.action=na.omit)
 
 # Print the model summary
 summary(model1)
 
+plot(hist(resid(model1)))
+plot(density(resid(model1)))
+
+pairs(data)
+
+cor(data)
+
+durbinWatsonTest(model1)
+
+par(mfrow = c(2, 2))
+plot(model1)
 
 # # Add new data to data frame
 newdat <- data.frame(
