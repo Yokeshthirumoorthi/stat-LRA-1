@@ -49,7 +49,9 @@ plot(model2)
 durbinWatsonTest(model2)
 
 press1 <- PRESS(model1)
+press1
 pred_r_squared(model1, press1)
 
 press2 <- PRESS(model2)
+press2
 pred_r_squared(model2, press2)
