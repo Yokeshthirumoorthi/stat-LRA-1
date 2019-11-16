@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Yokesh Thirumoorthi (STAT 564 HW5)</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body class="vscode-light">
+        <h3 id="yokesh-thirumoorthi-stat-564-hw5">Yokesh Thirumoorthi (STAT 564 HW5)</h3>
+<h4 id="question-413">Question 4.13</h4>
+<pre><code class="language-R"><div><span class="hljs-comment"># Read data from csv</span>
+data &lt;- read_csv(<span class="hljs-string">"TableB5.csv"</span>)
+
+<span class="hljs-comment"># Fit data to linear model</span>
+model1 &lt;- lm(y ~ x6 + x7, data = data)
+
+<span class="hljs-comment"># Print the model summary</span>
+summary(model1)
+
+<span class="hljs-comment">## Output</span>
+
+<span class="hljs-comment"># Residuals:</span>
+<span class="hljs-comment">#      Min       1Q   Median       3Q      Max </span>
+<span class="hljs-comment"># -23.2035  -4.3713   0.2513   4.9339  21.9682 </span>
+
+<span class="hljs-comment"># Coefficients:</span>
+<span class="hljs-comment">#             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="hljs-comment"># (Intercept) 2.526460   3.610055   0.700   0.4908    </span>
+<span class="hljs-comment"># x6          0.018522   0.002747   6.742 5.66e-07 ***</span>
+<span class="hljs-comment"># x7          2.185753   0.972696   2.247   0.0341 *  </span>
+<span class="hljs-comment"># ---</span>
+<span class="hljs-comment"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+
+<span class="hljs-comment"># Residual standard error: 9.924 on 24 degrees of freedom</span>
+<span class="hljs-comment"># Multiple R-squared:  0.6996,    Adjusted R-squared:  0.6746 </span>
+<span class="hljs-comment"># F-statistic: 27.95 on 2 and 24 DF,  p-value: 5.391e-07</span>
+
+<span class="hljs-comment"># diagnostic plots of the linear regression fit</span>
+plot(hist(resid(model1)))
+plot(density(resid(model1)))
+
+par(mfrow = c(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>))
+plot(model1)
+
+<span class="hljs-comment"># Refit the model for only x6</span>
+model2 &lt;- lm(y ~ x6, data = data)
+
+<span class="hljs-comment"># Print the model summary</span>
+summary(model2)
+
+<span class="hljs-comment"># Residuals:</span>
+<span class="hljs-comment">#     Min      1Q  Median      3Q     Max </span>
+<span class="hljs-comment"># -28.081  -5.829  -0.839   5.522  26.882 </span>
+
+<span class="hljs-comment"># Coefficients:</span>
+<span class="hljs-comment">#             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="hljs-comment"># (Intercept) 6.144181   3.483064   1.764   0.0899 .  </span>
+<span class="hljs-comment"># x6          0.019395   0.002932   6.616 6.24e-07 ***</span>
+<span class="hljs-comment"># ---</span>
+<span class="hljs-comment"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+
+<span class="hljs-comment"># Residual standard error: 10.7 on 25 degrees of freedom</span>
+<span class="hljs-comment"># Multiple R-squared:  0.6365,    Adjusted R-squared:  0.6219 </span>
+<span class="hljs-comment"># F-statistic: 43.77 on 1 and 25 DF,  p-value: 6.238e-07</span>
+
+
+<span class="hljs-comment"># diagnostic plots of the linear regression fit</span>
+plot(hist(resid(model2)))
+plot(density(resid(model2)))
+
+par(mfrow = c(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>))
+plot(model2)
+
+
+pred_r_squared &lt;- <span class="hljs-keyword">function</span>(model, press) {
+    anova &lt;- anova(model)
+    tss &lt;- sum(anova$<span class="hljs-string">"Sum Sq"</span>)
+    <span class="hljs-comment"># predictive R^2</span>
+    pred_r_squared &lt;- <span class="hljs-number">1</span> - press/(tss)
+    <span class="hljs-keyword">return</span>(pred_r_squared)
+}
+
+press1 &lt;- PRESS(model1)
+press1
+pred_r_squared(model1, press1)
+<span class="hljs-comment"># &gt; press1 &lt;- PRESS(model1)</span>
+<span class="hljs-comment"># &gt; press1</span>
+<span class="hljs-comment"># [1] 3388.604</span>
+<span class="hljs-comment"># &gt; pred_r_squared(model1, press1)</span>
+<span class="hljs-comment"># [1] 0.5694339</span>
+
+press2 &lt;- PRESS(model2)
+press2
+pred_r_squared(model2, press2)
+<span class="hljs-comment"># &gt; press2 &lt;- PRESS(model2)</span>
+<span class="hljs-comment"># &gt; press2</span>
+<span class="hljs-comment"># [1] 3692.881</span>
+<span class="hljs-comment"># &gt; pred_r_squared(model2, press2)</span>
+<span class="hljs-comment"># [1] 0.5307715</span>
+</div></code></pre>
+<hr>
+<p><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br></p>
+<h3 id="yokesh-thirumoorthi-stat-564-hw5-1">Yokesh Thirumoorthi (STAT 564 HW5)</h3>
+<h2 id="model-1--diagnostic-plots-of-the-linear-regression-fit">Model 1 : Diagnostic plots of the linear regression fit</h2>
+<ul>
+<li>Plot 1:</li>
+</ul>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_13_residual_model1.png" width="650" title="hover text">
+</p>
+<ul>
+<li>
+<p><strong>Residuals vs Fitted:</strong>
+The plots are relatively shapeless and there is no linear pattern.</p>
+</li>
+<li>
+<p><strong>Normal Q-Q:</strong>
+There does not seem to be a problem with normality as the plots are generally in a straight line.</p>
+</li>
+<li>
+<p><strong>Scale-Location (or Spread-Location):</strong>
+Since the variance of the residuals is not equally spread points the model has no homoscedasticity and has a heteroscedasticity problem.</p>
+</li>
+</ul>
+<hr>
+<p><br><br><br><br><br><br><br><br></p>
+<h3 id="yokesh-thirumoorthi-stat-564-hw5-2">Yokesh Thirumoorthi (STAT 564 HW5)</h3>
+<h2 id="model-2--diagnostic-plots-of-the-linear-regression-fit">Model 2 : Diagnostic plots of the linear regression fit</h2>
+<ul>
+<li>Plot 1:</li>
+</ul>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_13_residual_model2.png" width="450" title="hover text">
+</p>
+<ul>
+<li>
+<p><strong>Residuals vs Fitted:</strong>
+The plot of residuals versus fitted values indicates a non-linear relationship in the data.</p>
+</li>
+<li>
+<p><strong>Normal Q-Q:</strong>
+This model has its residuals normally distributed.</p>
+</li>
+<li>
+<p><strong>Scale-Location (or Spread-Location):</strong>
+Since the variance of the residuals is not equally spread points the model no homoscedasticity and has a heteroscedasticity problem.</p>
+</li>
+</ul>
+<hr>
+<p><br><br><br><br><br><br><br><br></p>
+<h3 id="yokesh-thirumoorthi-stat-564-hw5-3">Yokesh Thirumoorthi (STAT 564 HW5)</h3>
+<h3 id="residual-histograms">Residual Histograms</h3>
+<ul>
+<li>Model 1:</li>
+</ul>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_13_hist_model1.png" width="350" title="hover text">
+</p>
+<ul>
+<li>Model 2:</li>
+</ul>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_13_hist_model2.png" width="350" title="hover text">
+</p>
+<p>The residual errors of for both the models are normally distributed.</p>
+<hr>
+<p><br><br><br><br></p>
+<h3 id="yokesh-thirumoorthi-stat-564-hw5-4">Yokesh Thirumoorthi (STAT 564 HW5)</h3>
+<h2 id="insight-regarding-the-best-choice-of-model">Insight regarding the best choice of model</h2>
+<p>When model has both x6 and x7</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>R</mi><mi>E</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>3388.6</mn></mrow><annotation encoding="application/x-tex">PRESS = 3388.6
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">3</span><span class="mord">8</span><span class="mord">8</span><span class="mord">.</span><span class="mord">6</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>R</mi><mrow><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow><mn>2</mn></msubsup><mo>=</mo><mn>56.94</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">R^2_{pred}=56.94\%
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2472159999999999em;vertical-align:-0.383108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.864108em;"><span style="top:-2.4530000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">p</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">d</span></span></span></span><span style="top:-3.1130000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.383108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">5</span><span class="mord">6</span><span class="mord">.</span><span class="mord">9</span><span class="mord">4</span><span class="mord">%</span></span></span></span></span></p>
+<p>When model has only x6</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mi>R</mi><mi>E</mi><mi>S</mi><mi>S</mi><mo>=</mo><mn>3692.9</mn></mrow><annotation encoding="application/x-tex">PRESS = 3692.9
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">6</span><span class="mord">9</span><span class="mord">2</span><span class="mord">.</span><span class="mord">9</span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>R</mi><mrow><mi>p</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow><mn>2</mn></msubsup><mo>=</mo><mn>53.08</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">R^2_{pred}=53.08\%
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2472159999999999em;vertical-align:-0.383108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.864108em;"><span style="top:-2.4530000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">p</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">e</span><span class="mord mathdefault mtight">d</span></span></span></span><span style="top:-3.1130000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.383108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">5</span><span class="mord">3</span><span class="mord">.</span><span class="mord">0</span><span class="mord">8</span><span class="mord">%</span></span></span></span></span></p>
+<p>The residual plots for both models show nonconstant variance and departure from normality. Hence there is no insight into the best choice of model.</p>
+<hr>
+<h4 id="question-415">Question 4.15</h4>
+<pre><code class="language-R"><div>    <span class="hljs-comment"># Read data from csv</span>
+    data &lt;- read_csv(<span class="hljs-string">"TableB6.csv"</span>)
+
+    <span class="hljs-comment"># Fit data to linear model</span>
+    model1 &lt;- lm(y ~ x1 + x4, data = data)
+
+    <span class="hljs-comment"># Print the model summary</span>
+    summary(model1)
+
+    <span class="hljs-comment"># Output</span>
+    <span class="hljs-comment"># Residuals:</span>
+    <span class="hljs-comment">#     Min         1Q     Median         3Q        Max </span>
+    <span class="hljs-comment"># -0.0009015 -0.0003526 -0.0001538  0.0003847  0.0010874 </span>
+
+    <span class="hljs-comment"># Coefficients:</span>
+    <span class="hljs-comment">#             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+    <span class="hljs-comment"># (Intercept)  0.0048333  0.0008142   5.936 3.39e-06 ***</span>
+    <span class="hljs-comment"># x1          -0.3449837  0.0673963  -5.119 2.74e-05 ***</span>
+    <span class="hljs-comment"># x4          -0.0001430  0.0078151  -0.018    0.986    </span>
+    <span class="hljs-comment"># ---</span>
+    <span class="hljs-comment"># Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+
+    <span class="hljs-comment"># Residual standard error: 0.0005804 on 25 degrees of freedom</span>
+    <span class="hljs-comment"># Multiple R-squared:  0.6636,    Adjusted R-squared:  0.6367 </span>
+    <span class="hljs-comment"># F-statistic: 24.66 on 2 and 25 DF,  p-value: 1.218e-06</span>
+    
+    avPlots(model1)
+</div></code></pre>
+<p><strong>a.</strong> Construct a normal probability plot of the residuals. Does there seem to be any problem with the normality assumption?</p>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_15_qq.png" width="450" title="hover text">
+</p>
+<p>There does not seem to be a problem with normality as the plots are generally in a straight line.</p>
+<p><strong>b.</strong> Construct and interpret a plot of the residuals versus the predicted response.</p>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_15_resvsfit.png" width="450" title="hover text">
+</p>
+<p><br><br><br><br></p>
+<h3 id="yokesh-thirumoorthi-stat-564-hw5-5">Yokesh Thirumoorthi (STAT 564 HW5)</h3>
+<p>The plots are relatively shapeless and there is no linear pattern. The residuals are almost equally distributed around the 0 line without large outliers.</p>
+<p><strong>c.</strong>  Construct the partial regression plots for this model. Does it seem that some variables currently in the model are not necessary?</p>
+<p align="left">
+  <img src="file:////Users/mbpro/College/STAT/LRA/Q4_15_avplot.png" width="750" title="hover text">
+</p>
+<p>x1 shows a linear pattern but x4 does not. Hence concentration of COCl2 has strongest influence on predicting the concentration of NbOCl3 when compared to mole fraction.</p>
+
+    </body>
+    </html>
