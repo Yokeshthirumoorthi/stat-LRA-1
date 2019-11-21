@@ -10,7 +10,6 @@ model1 <- lm(Viscosity ~ Temperature, data = data)
 # Print the model summary
 summary(model1)
 
-# par(mfrow = c(2, 2))
 plot(data$Temperature,data$Viscosity)
 
 par(mfrow = c(2, 2))
