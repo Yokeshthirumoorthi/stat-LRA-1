@@ -6,40 +6,44 @@ library(pls)
 library(magrittr) # needs to be run every time you start R and want to use %>%
 library(dplyr) 
 
-
 # Read data from csv
 data <- read_csv("TableB21.csv")
 
-dim(data)
+# Linear model without PCA
+lmodel.none <- lm(Y ~ ., data = data)
+summary(lmodel.none)
 
+# Extracting the dependent variable y to data.y and removing it from the original dataframe.
 data.y <- data$Y
 data$Y <- NULL
 
+# Understand variable correlation
 res <- cor(data, method="pearson")
 corrplot::corrplot(res, method= "color", order = "hclust", tl.pos = 'n')
 
+# Do data normalization
 data.norm <- scale(data)
 data.y.norm <- scale(data.y)
 
-data.pca1 <- prcomp(data.norm, center=TRUE, scale.=TRUE, tol = 0)    
+# Get summary of principle components
+data.pca1 <- prcomp(data.norm, center=TRUE, scale.=TRUE)
 summary(data.pca1)
 
+# Look at the eigen values
 data.pca1$sdev
 
+# Understand principle components correlation
 res1 <- cor(data.pca1$x, method="pearson")
 corrplot::corrplot(res1, method= "color", order = "hclust", tl.pos = 'n')
 
-plot(summary(data.pca1)$importance[3,])
-
+#  Combine both principle components and y
 pcs <- as.data.frame(data.pca1$x)
 ols.data <- cbind(data.y.norm, pcs)
+
+# Perform principle component regression
 lmodel <- lm(data.y.norm ~ PC1 + PC2, data = ols.data)
 summary(lmodel)
 
-data <- read_csv("TableB21.csv")
-lmodel.none <- lm(Y ~ ., data = data)
-summary(lmodel.none)
-# lmodel.pcr <- pcr(Y ~ ., data = data, scale = TRUE, validation = "CV")
-# summary(lmodel.pcr)
-# validationplot(lmodel.pcr)
-
+# Perform principle component regression using significant PC
+lmodel <- lm(data.y.norm ~ PC1, data = ols.data)
+summary(lmodel)
