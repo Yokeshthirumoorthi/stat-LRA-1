@@ -38,12 +38,26 @@ corrplot::corrplot(res1, method= "color", order = "hclust", tl.pos = 'n')
 
 #  Combine both principle components and y
 pcs <- as.data.frame(data.pca1$x)
-ols.data <- cbind(data.y.norm, pcs)
+pcr.data <- cbind(data.y.norm, pcs)
 
 # Perform principle component regression
-lmodel <- lm(data.y.norm ~ PC1 + PC2, data = ols.data)
+lmodel <- lm(data.y.norm ~ PC1 + PC2, data = pcr.data)
 summary(lmodel)
 
 # Perform principle component regression using significant PC
-lmodel <- lm(data.y.norm ~ PC1, data = ols.data)
+lmodel <- lm(data.y.norm ~ PC1, data = pcr.data)
 summary(lmodel)
+
+fit <- pcr(data.y.norm ~., data = pcr.data)
+
+validationplot(fit, val.type="RMSEP", cex.axis=0.7)
+axis(side = 1, at = c(8), cex.axis=0.7)
+abline(v = 8, col = "blue", lty = 3)
+
+validationplot(fit, val.type="MSEP", cex.axis=0.7)
+axis(side = 1, at = c(8), cex.axis=0.7)
+abline(v = 8, col = "blue", lty = 3)
+
+validationplot(fit, val.type="R2", cex.axis=0.7)
+axis(side = 1, at = c(8), cex.axis=0.7)
+abline(v = 8, col = "blue", lty = 3)
