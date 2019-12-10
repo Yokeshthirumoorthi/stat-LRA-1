@@ -1,3 +1,6 @@
+#### Question 3
+
+```R
 library(readr) 
 library(lmridge)
 
@@ -7,7 +10,6 @@ data <- read_csv("TableB3.csv")
 mod <- lmridge(y~., data = data)
 
 kest(mod)
-
 # Output
 # Ridge k from different Authors
 
@@ -69,3 +71,12 @@ summary(mod)
 # Ridge minimum MSE= 3984.056 at K= 0.0159 
 # P-value for F-test ( 8.59864 , 20.28187 ) = 4.069372e-05 
 # -------------------------------------------------------------------
+```
+
+The fitted model with estimated parameters is
+
+$$\hat y = 14.49-0.03x1-0.007x2+0.0141x3+2.3160x4+3.4464x5-0.0702x6-1.8343x7+0.1185x8-0.3094x9-0.0034x10+0.3751x11$$
+
+Without the use of ridge regression the SSE is 0.179 and MSE is 0.0069. But with ridge regreesion it is observered that MSE is 3984.056 at K= 0.0159 
+
+Without the use of ridge regression The R2 is 92.17% and with ridge regression it is 78.71%, which is an decrease of around 15%.

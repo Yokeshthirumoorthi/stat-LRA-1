@@ -273,6 +273,18 @@ summary(fit6)
 ```
 Thus in this final model, we have, the performance of the model is again increased. The Adjusted R-squared raised to 0.9157 and F-statistic is increased to 153.1 from 93.33 in previous fit. The p-value of the predictors is significant. Also the Residual standard error has reduced to 0.0831.
 
+ANOVA:
+```R
+anova(fit6)
+#Output
+# Analysis of Variance Table
+
+# Response: log(y)
+#           Df  Sum Sq Mean Sq F value    Pr(>F)    
+# log(x1)    1 2.03568 2.03568 294.798 1.049e-15 ***
+# log(x5)    1 0.07904 0.07904  11.447  0.002279 ** 
+# Residuals 26 0.17954 0.00691            
+```
 The final model is 
 
 $$log(\hat y) = 6.94 - 0.62 * log(x1) - 0.47 * log(x5)$$

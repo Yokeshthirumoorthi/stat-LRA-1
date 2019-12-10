@@ -53,3 +53,4 @@ summary(fit6)
 par(mfrow = c(2, 2))
 plot(fit6)
 
+anova(fit6)
