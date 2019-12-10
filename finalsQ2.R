@@ -1,5 +1,6 @@
 library(readr) 
 library(car)
+library(olsrr)
 # Read data from csv
 data <- read_csv("TableB3.csv")
 
@@ -42,6 +43,9 @@ summary(fit4)
 par(mfrow = c(2, 2))
 plot(fit4)
 
+# Build regression model from a set of candidate predictor variables by entering and removing predictors based on p values, in a stepwise manner until there is no variable left to enter or remove any more.
+
+ols_step_both_p(fit4)
 
 fit5 <- lm(log(y) ~ log(x1) + log(x5), data = data)
 summary(fit5)

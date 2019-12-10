@@ -215,9 +215,73 @@ summary(fit4)
 # F-statistic: 61.62 on 3 and 28 DF,  p-value: 1.885e-12
 plot(fit4, which =1)
 ```
+
 Here the performance of the model has increased. The Adjusted R-squared raised to 0.8544 and F-statistic is increased to 61.62. 
 
-Based on t-value and pvalue if I drop x7 in previous model. 
+Now, build regression model from a set of candidate predictor variables by entering and removing predictors based on p values, in a stepwise manner until there is no variable left to enter or remove any more.
+
+```R
+ols_step_both_p(fit4)
+# Output
+# Stepwise Selection Method   
+# ---------------------------
+
+# Candidate Terms: 
+
+# 1. log(x1) 
+# 2. log(x5) 
+
+# We are selecting variables based on p value...
+
+# Variables Entered/Removed: 
+
+# ✔ log(x1) 
+# ✔ log(x5) 
+
+
+# Final Model Output 
+# ------------------
+
+#                         Model Summary                          
+# --------------------------------------------------------------
+# R                       0.930       RMSE                2.398 
+# R-Squared               0.865       Coef. Var          11.856 
+# Adj. R-Squared          0.856       MSE                 5.749 
+# Pred R-Squared          0.834       MAE                 1.802 
+# --------------------------------------------------------------
+#  RMSE: Root Mean Square Error 
+#  MSE: Mean Square Error 
+#  MAE: Mean Absolute Error 
+
+#                                ANOVA                                 
+# --------------------------------------------------------------------
+#                 Sum of                                              
+#                Squares        DF    Mean Square      F         Sig. 
+# --------------------------------------------------------------------
+# Regression    1070.829         2        535.415    93.135    0.0000 
+# Residual       166.715        29          5.749                     
+# Total         1237.544        31                                    
+# --------------------------------------------------------------------
+
+#                                     Parameter Estimates                                      
+# --------------------------------------------------------------------------------------------
+#       model       Beta    Std. Error    Std. Beta       t        Sig       lower      upper 
+# --------------------------------------------------------------------------------------------
+# (Intercept)    100.293        10.052                   9.977    0.000     79.734    120.851 
+#     log(x1)    -12.910         1.181       -1.056    -10.935    0.000    -15.325    -10.496 
+#     log(x5)     -7.707         3.877       -0.192     -1.988    0.056    -15.636      0.223 
+# --------------------------------------------------------------------------------------------
+
+#                              Stepwise Selection Summary                              
+# ------------------------------------------------------------------------------------
+#                      Added/                   Adj.                                      
+# Step    Variable    Removed     R-Square    R-Square     C(p)       AIC        RMSE     
+# ------------------------------------------------------------------------------------
+#    1    log(x1)     addition       0.847       0.842    4.9510    153.7173    2.5128    
+#    2    log(x5)     addition       0.865       0.856    3.0000    151.6296    2.3977    
+# ------------------------------------------------------------------------------------
+```
+Fit the model with selected parameters only.
 
 ```R
 fit5 <- lm(log(y) ~ log(x1) + log(x5), data = data)
