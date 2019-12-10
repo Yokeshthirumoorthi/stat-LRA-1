@@ -1,4 +1,4 @@
-#### Question 1
+#### Question 2
 
 ```R
 library(readr) 
@@ -247,7 +247,7 @@ The performance of the model is increased. The Adjusted R-squared raised to 0.85
   <img src="./finalQ2_fit5_res.png" width="450" title="hover text">
 </p>
 
-Residual Analysis:
+Outliers Observation:
 
 It is still observered that the are some outliers - point 6, 15, 22, which if eleminated could improve our model. Also from Normal q-q, this model has its residuals normally distributed except for the tail data (the outliers).
 
