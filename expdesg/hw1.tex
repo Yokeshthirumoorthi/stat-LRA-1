@@ -1,0 +1,173 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{listings}
+
+\lstnewenvironment{rc}[1][]{\lstset{language=R}}{}
+\newcommand{\ri}[1]{\lstinline{#1}}  %% Short for 'R inline'
+
+\lstset{language=R}             % Set R to default language
+
+\begin{document}
+
+\title{STAT 565 HW-1}
+\author{Yokesh Thirumoorthi}
+
+\maketitle
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Yokesh Thirumoorthi}
+\lhead{STAT 565 HW-1 Winter 2020}
+\rfoot{Page \thepage}
+
+\section{Question 1}
+
+\subsection{Data Processing}
+In order to carry out data analyses with R, the given data is formatted to two columns - one for independent variable (Mixing Technique) and another for the dependent variable (Tensile Strength). With this data format, the data is easily read with read.table() function in R.
+
+\begin{lstlisting}[language=R]
+    datafilename="./data/hw1.data"
+    #read the data into a table
+    data.ex1=read.table(datafilename,header=T)
+\end{lstlisting}
+
+\subsection{Analyses}
+In this problem, we are given a data set with a = 4 subsets, each containing n = 4 values for a total of $\displaystyle N=an=16$ data points. 
+Each subset contains measurements of tensile strength of cement samples that were produced with a different mixing technique, or treatment. We define the mean over all data points as the grand mean, and the mean of each point within a given treatment as the treatment mean.
+
+Since we are given a finite set of data, we could approximate these means by calculating sample means and compare each treatment data subset. The grand sample mean and the treatment sample means is given by: 
+
+\begin{lstlisting}[language=R]
+    # Find the grand sample mean
+    mean(data$Tensile_Strength) 
+
+    # Find the treatment sample means
+    mean(data$Tensile_Strength[data$Mixing_Technique == 1])
+    mean(data$Tensile_Strength[data$Mixing_Technique == 2])
+    mean(data$Tensile_Strength[data$Mixing_Technique == 3])
+    mean(data$Tensile_Strength[data$Mixing_Technique == 4])
+    
+    # Find Standard errors
+    sd(data$Tensile_Strength)
+    sd(data$Tensile_Strength[data$Mixing_Technique == 1])
+    sd(data$Tensile_Strength[data$Mixing_Technique == 2])
+    sd(data$Tensile_Strength[data$Mixing_Technique == 3])
+    sd(data$Tensile_Strength[data$Mixing_Technique == 4])
+
+\end{lstlisting}
+
+\clearpage
+
+\lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_means.txt}
+
+We now create a aov object
+
+\begin{lstlisting}[language=R]
+    #do the analysis of variance
+    aov.ex1 = aov(Tensile_Strength~Mixing_Technique,data=data.ex1)
+
+    #show the summary table
+    summary(aov.ex1)
+\end{lstlisting}
+
+\lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_anova.txt}
+
+\subsection{Hypothesis Testing}
+We have to know if one of the data subsets is significantly different from the others, as this may indicate that one of our manufacturing techniques is superior (or inferior) to the others. To compare our data subsets we are interested in whether most of the error is within the treatments or between the treatments. If most of the error is between the treatment means, then we can claim there are significant differences between them. If there is too much error within the treatment means we cannot claim that they are significantly different. Using the output of ANOVA, we have found the error between the treatment means as 
+
+$$\displaystyle MS_{Treatment} = 163,247$$
+
+The error within the treatment means could be observed from anova summary: 
+
+$$\displaystyle MS_{Error} = 12,826$$
+
+And the ratio is (f-value from anova output),
+
+$$\displaystyle F_0 = MS_{Treatment}/MS_{Error} = 12.7$$
+
+To determine whether or not there are significant differences between our treatments, we will compare above $\displaystyle F_0$ to $\displaystyle F_{\alpha, a-1, N-a}$. $\displaystyle F_{\alpha, a-1, N-a}$ is determined in R as below,
+
+\begin{lstlisting}[language=R]
+    qf(1-0.05, 3, 12)   
+
+    # Output
+    [1] 3.490295
+\end{lstlisting}
+
+\subsection{Conclusion}
+If $\displaystyle F_{0}>F_{\alpha ,\,a-1,\,N-a}$, which is the case here, then the error between treatment means is large enough compared to the error within treatment means to conclude that there is a significant difference between at least one treatment and the others. Also the F-value is 12.73 with the coresponding P-value of 0.0005. Hence mixing technique has effect and it affects the strength of cement.
+
+
+\section{Question 2}
+
+\subsection{Data Processing}
+The given data is formatted to two columns - one for the dependent variable (observations) and another for the independent variable (dosage). With this data format, the data is easily read with read.table() function in R.
+
+\begin{lstlisting}[language=R]
+    datafilename="./data/hw2.data"
+    #read the data into a table
+    data=read.table(datafilename,header=T)
+\end{lstlisting}
+
+
+\subsection{Analyses}
+In this problem, we are given a data set with a = 3 subsets, each containing n = 4 values for a total of $\displaystyle N=an=12$ data points. 
+
+Since we are given a finite set of data, we could calculate sample means and compare each dosages data subset. The grand sample mean and the dosages sample means is given by: 
+
+\begin{lstlisting}[language=R]
+    
+    mean(data$Observations)
+    mean(data$Observations[data$Dosages == 20])
+    mean(data$Observations[data$Dosages == 30])
+    mean(data$Observations[data$Dosages == 40])
+
+    sd(data$Observations)
+    sd(data$Observations[data$Dosages == 20])
+    sd(data$Observations[data$Dosages == 30])
+    sd(data$Observations[data$Dosages == 40])
+
+
+\end{lstlisting}
+
+\lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_means_q2.txt}
+
+
+\begin{lstlisting}[language=R]
+    #do the analysis of variance
+    aov.ex2 = aov(Observations~Dosages,data=data)
+
+    #show the summary table
+    summary(aov.ex2)
+\end{lstlisting}
+
+\lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_anova_q2.txt}
+
+\subsection{Hypothesis Testing}
+We have to know if one of the data subsets is significantly different from the others, as this may indicate that one of the treatment is superior (or inferior) to the others. To compare our data subsets we are interested in whether most of the error is within the treatments or between the treatments. If most of the error is between the treatment means, then we can claim there are significant differences between them. If there is too much error within the treatment means we cannot claim that they are significantly different. Using the output of ANOVA, we have found the error between the treatment means as 
+
+$$\displaystyle MS_{Treatment} = 225.33$$
+
+The error within the treatment means could be observed from anova summary: 
+
+$$\displaystyle MS_{Error} = 32.03$$
+
+And the ratio is (f-value from anova output),
+
+$$\displaystyle F_0 = MS_{Treatment}/MS_{Error} = 7.04$$
+
+To determine whether or not there are significant differences between our treatments, we will compare above $\displaystyle F_0$ to $\displaystyle F_{\alpha, a-1, N-a}$. $\displaystyle F_{\alpha, a-1, N-a}$ is determined in R as below,
+
+\begin{lstlisting}[language=R]
+    qf(1-0.05, 2, 9)   
+
+    # Output
+    [1] 4.256495
+\end{lstlisting}
+
+\subsection{Conclusion}
+If $\displaystyle F_{0}>F_{\alpha ,\,a-1,\,N-a}$, which is the case here, then the error between treatment means is large enough compared to the error within treatment means to conclude that there is a significant difference between at least one treatment and the others. Also the F-value is 7.04 with the coresponding P-value of 0.01. Hence there appears to be a difference in dosages.
+
+\end{document}
+

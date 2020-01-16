@@ -1,0 +1,17 @@
+> mean(data$Observations)
+[1] 37.08333
+> mean(data$Observations[data$Dosages == 20])
+[1] 29.75
+> mean(data$Observations[data$Dosages == 30])
+[1] 36.75
+> mean(data$Observations[data$Dosages == 40])
+[1] 44.75
+
+> sd(data$Observations)
+[1] 8.195989
+> sd(data$Observations[data$Dosages == 20])
+[1] 5.439056
+> sd(data$Observations[data$Dosages == 30])
+[1] 5.439056
+> sd(data$Observations[data$Dosages == 40])
+[1] 6.075909

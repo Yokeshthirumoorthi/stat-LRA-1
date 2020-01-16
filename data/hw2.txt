@@ -1,0 +1,13 @@
+    Dosages    Observations
+1    a                   24
+2    a                   28
+3    a                   37
+4    a                   30
+5    b                   37
+6    b                   44
+7    b                   31
+8    b                   35
+9    c                   42
+10    c                   47
+11    c                   52
+12    c                   38

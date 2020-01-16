@@ -1,0 +1,23 @@
+> mean(data$Tensile_Strength)
+[1] 2931.812
+
+> mean(data$Tensile_Strength[data$Mixing_Technique == 1])
+[1] 2971
+> mean(data$Tensile_Strength[data$Mixing_Technique == 2])
+[1] 3156.25
+> mean(data$Tensile_Strength[data$Mixing_Technique == 3])
+[1] 2933.75
+> mean(data$Tensile_Strength[data$Mixing_Technique == 4])
+[1] 2666.25
+
+> sd(data$Tensile_Strength)
+[1] 207.147
+
+> sd(data$Tensile_Strength[data$Mixing_Technique == 1])
+[1] 120.557
+> sd(data$Tensile_Strength[data$Mixing_Technique == 2])
+[1] 135.9764
+> sd(data$Tensile_Strength[data$Mixing_Technique == 3])
+[1] 108.2724
+> sd(data$Tensile_Strength[data$Mixing_Technique == 4])
+[1] 80.97067

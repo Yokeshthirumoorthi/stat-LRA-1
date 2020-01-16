@@ -1,0 +1,5 @@
+> summary(aov.ex1)
+                 Df Sum Sq Mean Sq F value   Pr(>F)    
+Mixing_Technique  3 489740  163247   12.73 0.000489 ***
+Residuals        12 153908   12826                     
+---
