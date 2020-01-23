@@ -1,4 +1,4 @@
-> summary(aov.ex2)
+> summary(model2)
             Df Sum Sq Mean Sq F value Pr(>F)  
 Dosages      2  450.7  225.33   7.036 0.0145 *
 Residuals    9  288.2   32.03                 

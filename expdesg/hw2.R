@@ -69,3 +69,28 @@ ggplot(data = data.ex1, aes(factor(Mixing_Technique), y = Tensile_Strength)) +
    labs(y ="Percent" , x="Data") + geom_boxplot(aes(fill = 
    factor(Mixing_Technique))) + xlab(expression(bold("Mixing Technique"))) +
    ylab(expression(bold("Strength"))) + theme_bw()
+
+#########################################################################################################
+# Question 2
+
+datafilename="./data/hw2.txt"
+data=read.table(datafilename,header=T)   #read the data into a table
+
+model2 = aov(Observations~Dosages,data=data)
+summary(model2)
+
+qf(1-0.05, 2, 9) 
+
+mean(data$Observations)
+mean(data$Observations[data$Dosages == 20])
+mean(data$Observations[data$Dosages == 30])
+mean(data$Observations[data$Dosages == 40])
+
+TukeyHSD(model2)
+
+
+#(2.c) 
+qqnorm(model2$residuals, pch = 20)
+qqline(model2$residuals)
+plot(model2$fitted.values, model2$residuals, main = "Residuals vs Fitted", pch = 20)
+abline(h=0, lty=2)

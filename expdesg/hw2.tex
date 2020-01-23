@@ -68,10 +68,10 @@ We now create a aov object
 
 \begin{lstlisting}[language=R]
     #do the analysis of variance
-    aov.ex1 = aov(Tensile_Strength~Mixing_Technique,data=data.ex1)
+    model1 = aov(Tensile_Strength~Mixing_Technique,data=data.ex1)
 
     #show the summary table
-    summary(aov.ex1)
+    summary(model1)
 \end{lstlisting}
 
 \lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_anova.txt}
@@ -165,7 +165,7 @@ If $\displaystyle \mid \bar{y_i} - \bar{y_j} \mid > LSD$ then the treatment mean
 \end{tabular}
 
 \paragraph{}
-Using R program, we got the LSD = 174.479.
+Using the below R program, we got the LSD = 174.479.
 
 The pair of treatment averages that differ in absolute value by more than 174.479 are {1 and 2}, {1 and 4}, {2 and 4} and {3 and 4}.
 And it would imply that there is a statistically significant difference between these treatment.
@@ -228,15 +228,12 @@ The plots are relatively shapeless and there is no linear pattern. The residuals
 \end{figure}
 
 \clearpage
-
-
-
-
-
-
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % %                 Question 2                              % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 \section{Question 2}
 
-\subsection{Data Processing}
+\paragraph{Data Processing}
 The given data is formatted to two columns - one for the dependent variable (observations) and another for the independent variable (dosage). With this data format, the data is easily read with read.table() function in R.
 
 \begin{lstlisting}[language=R]
@@ -246,40 +243,20 @@ The given data is formatted to two columns - one for the dependent variable (obs
 \end{lstlisting}
 
 
-\subsection{Analyses}
+\paragraph{Analyses}
 In this problem, we are given a data set with a = 3 subsets, each containing n = 4 values for a total of $\displaystyle N=an=12$ data points. 
-
-Since we are given a finite set of data, we could calculate sample means and compare each dosages data subset. The grand sample mean and the dosages sample means is given by: 
-
-\begin{lstlisting}[language=R]
-    
-    mean(data$Observations)
-    mean(data$Observations[data$Dosages == 20])
-    mean(data$Observations[data$Dosages == 30])
-    mean(data$Observations[data$Dosages == 40])
-
-    sd(data$Observations)
-    sd(data$Observations[data$Dosages == 20])
-    sd(data$Observations[data$Dosages == 30])
-    sd(data$Observations[data$Dosages == 40])
-
-
-\end{lstlisting}
-
-\lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_means_q2.txt}
-
 
 \begin{lstlisting}[language=R]
     #do the analysis of variance
-    aov.ex2 = aov(Observations~Dosages,data=data)
+    model2 = aov(Observations~Dosages,data=data)
 
     #show the summary table
-    summary(aov.ex2)
+    summary(model2)
 \end{lstlisting}
 
 \lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_anova_q2.txt}
 
-\subsection{Hypothesis Testing}
+\subsection{Is there evidence to indicate that dosage level affects bioactivitys}
 We have to know if one of the data subsets is significantly different from the others, as this may indicate that one of the treatment is superior (or inferior) to the others. To compare our data subsets we are interested in whether most of the error is within the treatments or between the treatments. If most of the error is between the treatment means, then we can claim there are significant differences between them. If there is too much error within the treatment means we cannot claim that they are significantly different. Using the output of ANOVA, we have found the error between the treatment means as 
 
 $$\displaystyle MS_{Treatment} = 225.33$$
@@ -301,8 +278,45 @@ To determine whether or not there are significant differences between our treatm
     [1] 4.256495
 \end{lstlisting}
 
-\subsection{Conclusion}
+\paragraph{Conclusion}
 If $\displaystyle F_{0}>F_{\alpha ,\,a-1,\,N-a}$, which is the case here, then the error between treatment means is large enough compared to the error within treatment means to conclude that there is a significant difference between at least one treatment and the others. Also the F-value is 7.04 with the coresponding P-value of 0.01. Hence there appears to be a difference in dosages.
+
+\subsection{If it is appropriate to do so, make comparisions between the pairs of means. What conclusion can you draw?}
+
+Since we are given a finite set of data, we could calculate sample means and compare each dosages data subset. The grand sample mean and the dosages sample means is given by: 
+
+\begin{lstlisting}[language=R]
+    
+    mean(data$Observations)
+    mean(data$Observations[data$Dosages == 20])
+    mean(data$Observations[data$Dosages == 30])
+    mean(data$Observations[data$Dosages == 40])
+
+    model2 = aov(Observations~Dosages,data=data)
+    TukeyHSD(model2)
+\end{lstlisting}
+
+\lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_means_q2.txt}
+
+\paragraph{}
+Because there appears to be a difference in the dosages, the comparision of means is appropriate.
+And by doing a Turkey comparision, we could notice a significant
+difference between dosage 20g and 40g.
+
+\subsection{Analyse the residuals from this experiment and comment on the model adequecy}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../pictures/hw2_q2_qq.png}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\textwidth]{../pictures/hw2_q2_rf.png}
+    \end{subfigure}
+\end{figure}
+
+There does not seem to be a problem with normality as the plots are generally in a straight line.
+And the residuals are almost equally distributed around the 0 line without large outliers. Hence there is nothing too unusual about the residuals.
 
 \end{document}
 

@@ -7,11 +7,14 @@
 > mean(data$Observations[data$Dosages == 40])
 [1] 44.75
 
-> sd(data$Observations)
-[1] 8.195989
-> sd(data$Observations[data$Dosages == 20])
-[1] 5.439056
-> sd(data$Observations[data$Dosages == 30])
-[1] 5.439056
-> sd(data$Observations[data$Dosages == 40])
-[1] 6.075909
+> TukeyHSD(model2)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = Observations ~ Dosages, data = data)
+
+$Dosages
+    diff       lwr      upr     p adj
+b-a    7 -4.172869 18.17287 0.2402975
+c-a   15  3.827131 26.17287 0.0114434
+c-b    8 -3.172869 19.17287 0.1680265
