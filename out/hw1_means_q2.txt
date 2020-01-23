@@ -7,14 +7,29 @@
 > mean(data$Observations[data$Dosages == 40])
 [1] 44.75
 
-> TukeyHSD(model2)
-  Tukey multiple comparisons of means
-    95% family-wise confidence level
+> lsd
+$statistics
+   MSerror Df     Mean       CV  t.value      LSD
+  32.02778  9 37.08333 15.26106 2.262157 9.052555
 
-Fit: aov(formula = Observations ~ Dosages, data = data)
+$parameters
+        test p.ajusted  name.t ntr alpha
+  Fisher-LSD      none Dosages   3  0.05
 
-$Dosages
-    diff       lwr      upr     p adj
-b-a    7 -4.172869 18.17287 0.2402975
-c-a   15  3.827131 26.17287 0.0114434
-c-b    8 -3.172869 19.17287 0.1680265
+$means
+  Observations      std r      LCL      UCL Min Max Q25  Q50   Q75
+a        29.75 5.439056 4 23.34888 36.15112  24  37  27 29.0 31.75
+b        36.75 5.439056 4 30.34888 43.15112  31  44  34 36.0 38.75
+c        44.75 6.075909 4 38.34888 51.15112  38  52  41 44.5 48.25
+
+$comparison
+NULL
+
+$groups
+  Observations groups
+c        44.75      a
+b        36.75     ab
+a        29.75      b
+
+attr(,"class")
+[1] "group"

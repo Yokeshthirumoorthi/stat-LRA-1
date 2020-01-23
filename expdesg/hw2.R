@@ -1,9 +1,9 @@
 #read the data into a table
 datafilename="./data/hw1.data"
-data.ex1=read.table(datafilename,header=T)
+data=read.table(datafilename,header=T)
 
 #do the analysis of variance
-model1 = aov(Tensile_Strength~Mixing_Technique,data=data.ex1)
+model1 = aov(Tensile_Strength~Mixing_Technique,data=data)
 
 #(1.a) Test the hypothesis that mixing techniques affect the strength of
 #the cement. Use α=0.05.
@@ -57,14 +57,14 @@ abline(h=0, lty=2)
 #(1.f) Prepare a scatter plot of the results to aid the interpretation of 
 #the results of this experiment
 #INPUT
-ggplot(data = data.ex1, aes(factor(Mixing_Technique), y = Tensile_Strength)) + 
+ggplot(data = data, aes(factor(Mixing_Technique), y = Tensile_Strength)) + 
    geom_point(colour = "darkred", size = 3) + 
    labs(y ="Percent" , x="Data") + geom_point(aes(fill = 
    factor(Mixing_Technique))) + xlab(expression(bold("Mixing Technique"))) +
    ylab(expression(bold("Strength"))) + theme_bw()
 
 #INPUT
-ggplot(data = data.ex1, aes(factor(Mixing_Technique), y = Tensile_Strength)) + 
+ggplot(data = data, aes(factor(Mixing_Technique), y = Tensile_Strength)) + 
    geom_point(colour = "darkred", size = 3) + 
    labs(y ="Percent" , x="Data") + geom_boxplot(aes(fill = 
    factor(Mixing_Technique))) + xlab(expression(bold("Mixing Technique"))) +
@@ -86,7 +86,10 @@ mean(data$Observations[data$Dosages == 20])
 mean(data$Observations[data$Dosages == 30])
 mean(data$Observations[data$Dosages == 40])
 
-TukeyHSD(model2)
+lsd <- LSD.test(model2,"Dosages")
+lsd
+
+# TukeyHSD(model2)
 
 
 #(2.c) 

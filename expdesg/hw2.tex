@@ -32,7 +32,7 @@ In order to carry out data analyses with R, the given data is formatted to two c
 \begin{lstlisting}[language=R]
     datafilename="./data/hw1.data"
     #read the data into a table
-    data.ex1=read.table(datafilename,header=T)
+    data=read.table(datafilename,header=T)
 \end{lstlisting}
 
 \paragraph{Analyses}
@@ -121,14 +121,15 @@ If $\displaystyle F_{0}>F_{\alpha ,\,a-1,\,N-a}$, which is the case here, then t
     vlines <- data.frame(xint = 
         c(xvaltrn,mean(xvaltrn)),grp = letters[1:5])
     attach(vlines)
-    
-    qplot(x, tvalues) 
-        + geom_polygon(fill = "white", colour = "grey", alpha = 0.2)  
-        + geom_vline(data = vlines, aes(xintercept = xint, colour = grp), 
-            linetype = "dashed", size = 0.5) + theme_bw() 
-        + xlab('x values with intercept of Average Tensile Strength') 
-        + ylab(expression(bold(P(x))))
   
+    qplot(x, tvalues) 
+    + geom_polygon(fill = "white", colour = "grey", alpha = 0.2)  
+    + geom_vline(data = vlines, aes(xintercept = xint, colour = grp), 
+                linetype = "dashed", size = 0.5) 
+    + theme_bw() 
+    + xlab((('x values with intercept of Average Tensile Strength'))) 
+    + ylab(expression(bold(P(x))))
+
 \end{lstlisting}
 
 \begin{figure}[H]
@@ -151,6 +152,9 @@ $\displaystyle \mu_4$ and $\displaystyle \mu_2$ are differnt;
 
 Fisher LSD comparisons allow each pair of treatment means to be compared. 
 If $\displaystyle \mid \bar{y_i} - \bar{y_j} \mid > LSD$ then the treatment means  $\displaystyle i$ and $\displaystyle j$ are significantly different. 
+
+From section1.1 above, we have the treatment means as 
+$\displaystyle \bar{y_1.}=2971, \bar{y_2.}=3156.25, \bar{y_3.}=2933.75, \bar{y_4.}=2666.25$
 
 \paragraph{}
 \begin{tabular}{ |p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|  }
@@ -292,15 +296,29 @@ Since we are given a finite set of data, we could calculate sample means and com
     mean(data$Observations[data$Dosages == 30])
     mean(data$Observations[data$Dosages == 40])
 
-    model2 = aov(Observations~Dosages,data=data)
-    TukeyHSD(model2)
+    model2 = aov(Observations~Dosages,data=data)    
+    lsd <- LSD.test(model2,"Dosages")
+    lsd
+
 \end{lstlisting}
+
+\clearpage
 
 \lstinputlisting[float=h,frame=tb,caption=R output,label=zebra]{../out/hw1_means_q2.txt}
 
+\begin{center}
+    \begin{tabular}{ | c | r |}
+      \hline
+                         & $\displaystyle \mid \bar{y_i} - \bar{y_j} \mid$ \\ \hline
+       Treatment a and b & 7 \\ \hline
+       Treatment a and c & \cellcolor{gray!30}15 \\ \hline
+       Treatment b and c & 8 \\ \hline
+    \end{tabular}
+\end{center}
+Here Treatment a is dosage 20g, Treatment b is dosage 30g and Treatment c is dosage 40g
 \paragraph{}
 Because there appears to be a difference in the dosages, the comparision of means is appropriate.
-And by doing a Turkey comparision, we could notice a significant
+And by doing a Fisher comparision, we could notice that there is a significant
 difference between dosage 20g and 40g.
 
 \subsection{Analyse the residuals from this experiment and comment on the model adequecy}
