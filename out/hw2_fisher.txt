@@ -1,0 +1,33 @@
+> lsd
+$statistics
+   MSerror Df     Mean       CV  t.value      LSD
+  12825.69 12 2931.812 3.862817 2.178813 174.4798
+
+$parameters
+        test p.ajusted           name.t ntr alpha
+  Fisher-LSD      none Mixing_Technique   4  0.05
+
+$means
+  Tensile_Strength       std r      LCL      UCL  Min  Max     Q25    Q50
+a          2971.00 120.55704 4 2847.624 3094.376 2865 3129 2883.75 2945.0
+b          3156.25 135.97641 4 3032.874 3279.626 2975 3300 3106.25 3175.0
+c          2933.75 108.27242 4 2810.374 3057.126 2800 3050 2875.00 2942.5
+d          2666.25  80.97067 4 2542.874 2789.626 2600 2765 2600.00 2650.0
+      Q75
+a 3032.25
+b 3225.00
+c 3001.25
+d 2716.25
+
+$comparison
+NULL
+
+$groups
+  Tensile_Strength groups
+b          3156.25      a
+a          2971.00      b
+c          2933.75      b
+d          2666.25      c
+
+attr(,"class")
+[1] "group"

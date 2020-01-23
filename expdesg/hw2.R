@@ -31,15 +31,10 @@ tvalues <- dt(x,15)
 vlines <- data.frame(xint = c(xvaltrn,mean(xvaltrn)),grp = letters[1:5])
 attach(vlines)
 
-qplot(x, tvalues) + geom_polygon(fill = "purple", colour = "purple", 
-  alpha = 0.5) + geom_point(fill = "purple", colour = "purple", alpha = 0.2,
-  pch = 21) + geom_vline(data = vlines,aes(xintercept = xint, colour = grp), 
-  linetype = "dashed", size = 1) + theme_bw() + 
-  xlab(bquote(bold('x values with intercept of Average Tensile Strength 
-  (lb/in'^'2'*')'))) + ylab(expression(bold(P(x)))) +
-  labs(title = expression(bold("Student t Distribution")), 
-       plot.title = theme_text(size = 20, colour = "darkblue"),
-       panel.border = theme_rect(size = 2, colour = "red"))
+qplot(x, tvalues) + geom_polygon(fill = "white", colour = "grey", 
+  alpha = 0.2)  + geom_vline(data = vlines, aes(xintercept = xint, colour = grp), 
+  linetype = "dashed", size = 0.5) + theme_bw() + 
+  xlab((('x values with intercept of Average Tensile Strength'))) + ylab(expression(bold(P(x))))
 
 #(1.c) Use the Fisher LSD method with α=0.05 to make comparisons between 
 #pairs of means.
