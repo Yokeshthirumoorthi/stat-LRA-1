@@ -1,0 +1,11 @@
+> mean(fuel[oil == 1])
+[1] 0.4924
+> mean(fuel[oil == 2])
+[1] 0.541
+> mean(fuel[oil == 3])
+[1] 0.5012
+
+> lsd
+$statistics
+       MSerror Df      Mean       CV  t.value        LSD
+  0.0005277833  8 0.5115333 4.491112 2.306004 0.07492089

@@ -1,0 +1,6 @@
+> summary(aov(lm.fit))
+            Df Sum Sq Mean Sq F value  Pr(>F)    
+Region       3  49036   16345   18.07 0.00208 ** 
+Design       2  90755   45378   50.15 0.00018 ***
+Residuals    6   5429     905                    
+---

@@ -1,0 +1,6 @@
+> summary(aov(model1))
+            Df  Sum Sq  Mean Sq F value   Pr(>F)    
+oil          2 0.00671 0.003353   6.353   0.0223 *  
+truck        4 0.09210 0.023025  43.626 1.78e-05 ***
+Residuals    8 0.00422 0.000528                     
+---

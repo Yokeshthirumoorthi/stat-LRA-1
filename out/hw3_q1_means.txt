@@ -1,0 +1,11 @@
+> mean(Mail[Design == 1])
+[1] 298.5
+> mean(Mail[Design == 2])
+[1] 473.75
+> mean(Mail[Design == 3])
+[1] 281.25
+
+> lsd
+$statistics
+   MSerror Df     Mean       CV  t.value      LSD
+  904.8056  6 351.1667 8.565729 2.446912 104.0905

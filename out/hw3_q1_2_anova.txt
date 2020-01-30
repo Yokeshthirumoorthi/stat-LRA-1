@@ -1,0 +1,6 @@
+> summary(aov(t_model))
+            Df Sum Sq Mean Sq F value   Pr(>F)    
+Region       3  35.89  11.964   23.82 0.000986 ***
+Design       2  60.73  30.367   60.47 0.000106 ***
+Residuals    6   3.01   0.502                     
+---
